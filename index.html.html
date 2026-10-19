@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Il Gioco del Cane</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff6e8;--card:#fffdf8;--ink:#2a2438;--mut:#7a7188;--line:#eadfcf;--acc:#ff6b4a;--c0:#ff6b4a;--c1:#14a39a;--c2:#7a5cff;--ok:#1f9d55;--bad:#d64545;--sh:0 4px 14px rgba(60,40,20,.1);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17141f;--card:#221e2e;--ink:#f4efe8;--mut:#a79fb8;--line:#383248;--sh:0 4px 14px rgba(0,0,0,.4);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17141f;--card:#221e2e;--ink:#f4efe8;--mut:#a79fb8;--line:#383248;--sh:0 4px 14px rgba(0,0,0,.4);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.4 "Fredoka",ui-rounded,system-ui,-apple-system,sans-serif;padding-bottom:92px}
+header{padding:18px 16px 4px;text-align:center}
+h1{margin:0;font-size:27px;font-weight:700}
+.sub{color:var(--mut);font-size:14px;margin:2px 0 0}
+.wrap{max-width:560px;margin:0 auto;padding:10px 14px}
+.tab{display:none}.tab.on{display:block}
+.p0{--pc:var(--c0)}.p1{--pc:var(--c1)}.p2{--pc:var(--c2)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:0 0 12px;box-shadow:var(--sh)}
+.hero{text-align:center;padding:24px 16px}
+.big{font-size:64px;line-height:1}
+.lbl{font-size:18px;color:var(--mut);margin:6px 0 10px}
+.who{font-size:52px;font-weight:700;color:var(--pc,var(--ink));line-height:1.1;margin:0 0 8px}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px;margin:10px 0 0;font:inherit;font-weight:600;font-size:17px;background:var(--acc);color:#fff;text-decoration:none;text-align:center;cursor:pointer}
+.btn.ok{background:var(--ok)}.btn.bad{background:var(--bad)}.btn.alt{background:var(--c2)}.btn.wa{background:#25a65a}
+.btn.p0{background:var(--c0)}.btn.p1{background:var(--c1)}.btn.p2{background:var(--c2)}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+h3{margin:0 0 6px;font-size:18px}
+.mut{color:var(--mut)}
+.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.row:last-child{border:0}
+.av{width:44px;height:44px;border-radius:50%;background:var(--pc);color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px}
+.row .n{flex:1;font-size:18px}
+.pts{font-size:34px;font-weight:700;color:var(--pc)}
+.chips{display:flex;gap:8px}
+.chip{flex:1;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:14px;padding:10px 4px;font:inherit;font-weight:600;cursor:pointer}
+.chip.on{background:var(--pc);border-color:var(--pc);color:#fff}
+.task{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.task:last-child{border:0}
+.price{border:0;background:var(--acc);color:#fff;border-radius:12px;padding:7px 12px;font:inherit;font-weight:700;min-width:62px;cursor:pointer}
+.log{list-style:none;margin:0;padding:0}
+.log li{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.pl{color:var(--ok)}.mi{color:var(--bad)}
+small{color:var(--mut)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-size:12px;font-weight:600;padding:6px 0;cursor:pointer}
+nav button span{display:block;font-size:22px}
+nav button.on{color:var(--acc)}
+#toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;opacity:0;transition:.25s;max-width:90%;text-align:center;z-index:9;pointer-events:none;font-size:14px}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.sheet h2{margin:0;text-align:center;font-size:26px;letter-spacing:1px}
+.sheet ol{margin:6px 0 10px;padding-left:22px}.sheet ol li{margin:4px 0}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.cat{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;break-inside:avoid}
+.cat h4{margin:0 0 4px;font-size:15px}
+.cat .r{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:2px 0}
+.sheet table{width:100%;border-collapse:collapse;margin-top:8px}
+.sheet th,.sheet td{border:1.5px solid var(--line);padding:6px 4px;text-align:center}
+.sheet th{background:var(--pc,var(--ink));color:#fff}
+.sheet td{height:34px}
+.pt{margin-top:14px}
+@media print{
+:root:root:root{--bg:#fff;--card:#fff;--ink:#000;--line:#999;--mut:#444;padding:0}
+body{padding:0;background:#fff}
+header,nav,#toast,.noprint,.tab:not(#t-sheet){display:none!important}
+.wrap{max-width:none;padding:0}
+.card{box-shadow:none;border:0;padding:0}
+.grid{grid-template-columns:repeat(2,1fr)}
+.pt{page-break-before:always}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4;margin:12mm}
+}
+</style>
+</head>
+<body>
+<header><h1>🐕 Il Gioco del Cane</h1><p class="sub" id="names"></p><p class="sub" id="sync" style="margin-top:4px"></p></header>
+<main class="wrap">
+<section class="tab on" id="t-draw"></section>
+<section class="tab" id="t-score"></section>
+<section class="tab" id="t-shop"></section>
+<section class="tab" id="t-sheet"></section>
+</main>
+<nav>
+<button class="on" data-a="tab" data-t="draw"><span>🎲</span>Sorteggio</button>
+<button data-a="tab" data-t="score"><span>🏆</span>Punti</button>
+<button data-a="tab" data-t="shop"><span>🛒</span>Mansioni</button>
+<button data-a="tab" data-t="sheet"><span>🖨️</span>Regole</button>
+</nav>
+<div id="toast"></div>
+<script>
+const P=["Samu","Nicole","Gaia"];
+const TASKS=[
+["🛏️ Camera",[["Rifare il letto di un’altra",1],["Cambiare le lenzuola",2],["Riordinare la camera di un’altra",3],["Mettere a posto i suoi vestiti puliti",2]]],
+["🛁 Bagno",[["Svuotare il cestino",1],["Lavandino e specchio",1],["Pulire il WC",2],["Lavare doccia o vasca",2],["Bagno completo",4]]],
+["🍽️ Cucina",[["Apparecchiare",1],["Sparecchiare",1],["Svuotare la lavastoviglie",1],["Lavare i piatti di una cena",2],["Pulire fornelli e piano",1],["Pulire il frigo",3],["Cucinare per tutte",4]]],
+["🧺 Bucato",[["Avviare una lavatrice",1],["Stendere i panni",1],["Piegare e riporre",2],["Stirare un cesto",3]]],
+["🧹 Casa",[["Portare fuori la spazzatura",1],["Spolverare",2],["Aspirapolvere (una stanza)",2],["Lavare i pavimenti",4],["Pulire i vetri",3]]],
+["🐾 Extra cane",[["Ciotole cibo e acqua",1],["Lavare le ciotole",1],["Spazzolare il cane",1],["Pulire la cuccia",2],["Bagnetto al cane",4]]],
+["🛍️ Varie",[["Commissione veloce / ritiro pacco",2],["Fare la spesa",4],["Scegliere il film della serata",1]]]
+];
+const $=s=>document.querySelector(s);
+const D0={pts:[0,0,0],log:[],ex:[],cur:null,msg:null,buyer:0};
+let S=JSON.parse(JSON.stringify(D0)),tab="draw",vol=false,rolling=false,rollName="",armed=false,tt;
+try{const j=localStorage.getItem("cane_v1");if(j)S=Object.assign({},D0,JSON.parse(j))}catch(e){}
+let RO=false;
+function badge(m){$("#sync").textContent=m}
+function save(){try{localStorage.setItem("cane_v1",JSON.stringify(S))}catch(e){}}
+function initSync(){badge("📱 Punti salvati su questo telefono")}
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const enc=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+const dec=s=>JSON.parse(decodeURIComponent(escape(atob(s))));
+function tok(n){return "\n\n🔗 cane:"+enc(S.log.slice(0,n).map(l=>[l.id,l.i,l.d,l.t.toString(36),l.txt]))}
+function importMsg(txt){
+ let n=0;
+ (txt.match(/cane:([A-Za-z0-9+\/=]+)/g)||[]).forEach(m=>{
+  let arr;try{arr=dec(m.slice(5))}catch(e){return}
+  if(!Array.isArray(arr))return;
+  arr.forEach(r=>{
+   if(!Array.isArray(r)||r.length<5)return;
+   const [id,i,d,t,x]=r;
+   if(!id||!(i>=0&&i<P.length)||typeof d!=="number"||S.log.some(l=>l.id===id))return;
+   S.pts[i]+=d;S.log.push({id,i,d,txt:String(x).slice(0,60),t:parseInt(t,36)||Date.now()});n++;
+  });
+ });
+ S.log.sort((a,b)=>b.t-a.t);S.log=S.log.slice(0,200);
+ if(n)save();render();
+ return n;
+}
+function toast(m){const e=$("#toast");e.textContent=m;e.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("on"),2600)}
+function rank(){return P.map((n,i)=>[n,S.pts[i]]).sort((a,b)=>b[1]-a[1]).map(x=>x[0]+" "+x[1]).join(" · ")}
+function add(i,d,txt){S.pts[i]+=d;S.log.unshift({id:uid(),i,d,txt,t:Date.now()});S.log=S.log.slice(0,200);save();render()}
+function done(i,d,txt,lg){
+ add(i,d,lg);
+ S.msg=txt+"\n"+(d>0?"+":"")+d+" punt"+(Math.abs(d)>1?"i":"o")+" mansione per "+P[i]+" ✅\n\n🏆 Classifica: "+rank()+tok(5);
+ S.cur=null;S.ex=[];vol=false;save();render();
+}
+function draw(){
+ if(rolling)return;
+ let pool=[0,1,2].filter(i=>!S.ex.includes(i));
+ if(!pool.length){S.ex=[];pool=[0,1,2]}
+ const w=pool[Math.floor(Math.random()*pool.length)];
+ S.cur=null;S.msg=null;vol=false;rolling=true;let n=0;
+ const iv=setInterval(()=>{
+  rollName=P[Math.floor(Math.random()*P.length)];
+  if(++n>14){clearInterval(iv);rolling=false;S.cur=w;save()}
+  render();
+ },100);
+}
+function wa(t){return "https://wa.me/?text="+encodeURIComponent(t)}
+function render(){
+ const c=S.cur;let h;
+ if(rolling)h=`<div class="card hero"><div class="big">🎲</div><div class="lbl">Il destino sta scegliendo…</div><div class="who">${rollName}</div></div>`;
+ else if(S.msg)h=`<div class="card hero"><div class="big">🎉</div><div class="lbl">Missione compiuta!</div><p class="mut">${S.msg.split("\n")[0]}</p><a class="btn wa" target="_blank" rel="noopener" href="${wa(S.msg)}">📲 Avvisa nel gruppo</a><button class="btn ghost" data-a="new">🎲 Nuovo sorteggio</button></div>`;
+ else if(c===null)h=`<div class="card hero"><div class="big">🐕</div><div class="lbl">Chi porta fuori il cane?</div><button class="btn" data-a="draw">🎲 Sorteggia</button></div>`;
+ else h=`<div class="card hero p${c}"><div class="lbl">Tocca a…</div><div class="who">${P[c]}</div>${vol
+  ?P.map((n,i)=>i===c?"":`<button class="btn p${i}" data-a="v" data-i="${i}">🙋 ${n} si offre (+2)</button>`).join("")+`<button class="btn ghost" data-a="back">← Indietro</button>`
+  :`<button class="btn ok" data-a="go">✅ Esco io (+1)</button><button class="btn alt" data-a="vol">🙋 Si offre un’altra (+2)</button><button class="btn bad" data-a="no">🚫 Rifiuto (−2)</button>`}</div>`;
+ h+=`<div class="card"><h3>Come si fa punti</h3><div class="task"><span>✅ Esce la sorteggiata</span><b class="pl">+1</b></div><div class="task"><span>🙋 Volontaria al posto suo</span><b class="pl">+2</b></div><div class="task"><span>🚫 Rifiuta dopo il sorteggio</span><b class="mi">−2</b></div></div>`;
+ $("#t-draw").innerHTML=h;
+
+ const ord=[0,1,2].sort((a,b)=>S.pts[b]-S.pts[a]);
+ $("#t-score").innerHTML=`<div class="card">${ord.map((i,r)=>`<div class="row p${i}"><div class="av">${P[i][0]}</div><b class="n">${["🥇","🥈","🥉"][r]} ${P[i]}</b><span class="pts">${S.pts[i]}</span></div>`).join("")}</div>
+<a class="btn wa" target="_blank" rel="noopener" href="${wa("🏆 Classifica punti mansione: "+rank()+tok(8))}">📲 Manda aggiornamenti al gruppo</a>
+<div class="card" style="margin-top:12px"><h3>Ultime mosse</h3>${S.log.length?`<ul class="log">${S.log.slice(0,12).map(l=>`<li><span><b>${P[l.i]}</b> · ${l.txt} <small>${new Date(l.t).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</small></span><b class="${l.d>0?"pl":"mi"}">${l.d>0?"+":"−"}${Math.abs(l.d)}</b></li>`).join("")}</ul>`:`<small>Ancora nessuna mossa.</small>`}</div>
+<div class="card" style="margin-top:12px"><h3>📥 Importa dal gruppo</h3><p class="mut" style="margin:0 0 8px;font-size:14px">Copia un messaggio del gruppo che contiene “🔗 cane:…” e incollalo qui.</p><textarea id="imp" rows="3" style="width:100%;border:2px solid var(--line);border-radius:12px;padding:10px;font:inherit;background:var(--bg);color:var(--ink)"></textarea><button class="btn" data-a="imp">Importa i punti</button></div>
+<button class="btn ghost" data-a="undo">↩️ Annulla ultima mossa</button><button class="btn ghost" data-a="reset">🗑️ Azzera tutto</button>`;
+
+ $("#t-shop").innerHTML=`<div class="card"><h3>Chi paga?</h3><div class="chips">${P.map((n,i)=>`<button class="chip p${i}${S.buyer===i?" on":""}" data-a="who" data-i="${i}">${n} · ${S.pts[i]}</button>`).join("")}</div></div>`
+ +TASKS.map((c,k)=>`<div class="card"><h3>${c[0]}</h3>${c[1].map((t,j)=>`<div class="task"><span>${t[0]}</span><button class="price" data-a="buy" data-k="${k}" data-j="${j}">${t[1]} pt</button></div>`).join("")}</div>`).join("");
+}
+function buildSheet(){
+ $("#t-sheet").innerHTML=`<button class="btn noprint" data-a="print" style="margin:0 0 6px">🖨️ Stampa il foglio</button><p class="noprint sub" style="margin:0 0 12px;text-align:center">Su iPhone: Condividi → Stampa</p>
+<div class="card sheet"><h2>🐕 IL GIOCO DEL CANE</h2><p class="sub" style="text-align:center">${P.join(" · ")}</p>
+<h3>📜 Regole</h3><ol>
+<li>Chi esce il cane lo decide il <b>sorteggio</b>. Niente trattative!</li>
+<li>Chi lo esce avvisa nel gruppo che il cane è stato portato fuori: <b>+1 punto mansione</b>.</li>
+<li>Se una si offre <b>volontaria</b> al posto della sorteggiata: <b>+2 punti</b> (alla sorteggiata 0).</li>
+<li>Se la sorteggiata <b>rifiuta</b>: <b>−2 punti</b> e si risorteggia tra le altre.</li>
+<li>I punti si spendono per far fare le mansioni del listino. Niente punti, niente mansione!</li>
+<li>Vale solo con il messaggio nel gruppo: niente messaggio, niente punto.</li></ol>
+<p class="mut" style="margin:0 0 8px">💡 1 punto ≈ 15–20 minuti di fatica.</p>
+<h3>🛒 Listino mansioni</h3>
+<div class="grid">${TASKS.map(c=>`<div class="cat"><h4>${c[0]}</h4>${c[1].map(t=>`<div class="r"><span>${t[0]}</span><b>${t[1]} pt</b></div>`).join("")}</div>`).join("")}</div>
+<div class="pt"><h3>🏆 Tabellone punti</h3><table><tr><th style="width:15%">Data</th><th>Cosa è successo</th>${P.map((n,i)=>`<th class="p${i}" style="width:14%">${n}</th>`).join("")}</tr>${"<tr><td></td><td></td><td></td><td></td><td></td></tr>".repeat(16)}</table></div></div>`;
+}
+function show(){
+ document.querySelectorAll(".tab").forEach(e=>e.classList.toggle("on",e.id==="t-"+tab));
+ document.querySelectorAll("nav button").forEach(e=>e.classList.toggle("on",e.dataset.t===tab));
+ scrollTo(0,0);
+}
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-a]");if(!b)return;
+ const a=b.dataset.a,i=+b.dataset.i;
+ if(RO&&["draw","go","v","no","new","buy","undo","reset"].includes(a)){toast("👀 Sola lettura: chiedi di essere invitata come editor");return}
+ if(a==="tab"){tab=b.dataset.t;show()}
+ else if(a==="draw")draw();
+ else if(a==="go")done(S.cur,1,P[S.cur]+" ha portato fuori il cane 🐕","🐕 Cane uscito");
+ else if(a==="vol"){vol=true;render()}
+ else if(a==="back"){vol=false;render()}
+ else if(a==="v")done(i,2,P[i]+" si è offerta volontaria al posto di "+P[S.cur]+" e ha portato fuori il cane 🐕","🙋 Volontaria per il cane");
+ else if(a==="no"){const c=S.cur;add(c,-2,"🚫 Ha rifiutato il cane");S.ex.push(c);S.cur=null;toast("🚫 "+P[c]+" perde 2 punti: si risorteggia");draw()}
+ else if(a==="new"){S.msg=null;S.ex=[];save();render()}
+ else if(a==="who"){S.buyer=i;save();render()}
+ else if(a==="buy"){
+  const t=TASKS[+b.dataset.k][1][+b.dataset.j],c=t[1],w=S.buyer;
+  if(S.pts[w]<c){toast(P[w]+" ha "+S.pts[w]+" pt: ne servono "+c);return}
+  add(w,-c,"🛒 "+t[0]);toast("✅ "+P[w]+" spende "+c+" pt: "+t[0]);
+ }
+ else if(a==="undo"){const l=S.log.shift();if(l){S.pts[l.i]-=l.d;save();render();toast("↩️ Mossa annullata")}}
+ else if(a==="reset"){
+  if(!armed){armed=true;b.textContent="⚠️ Sicura? Tocca ancora";setTimeout(()=>{armed=false;render()},3000)}
+  else{armed=false;const by=S.buyer;S=JSON.parse(JSON.stringify(D0));S.buyer=by;save();render();toast("Tutto azzerato")}
+ }
+ else if(a==="imp"){const n=importMsg($("#imp").value||"");toast(n?"✅ "+n+(n>1?" mosse importate":" mossa importata"):"Nessuna mossa nuova trovata")}
+ else if(a==="print"){try{window.print()}catch(x){toast("Usa Condividi → Stampa")}}
+});
+$("#names").textContent=P.join(" · ");
+buildSheet();render();initSync();
+</script>
+</body>
+</html>
